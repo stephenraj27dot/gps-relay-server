@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: route-royal-relay
+    env: node
+    plan: free # Can be upgraded for higher-load colleges
+    buildCommand: npm install
+    startCommand: node src/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: REDIS_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: "*"
+    disk:
+      name: temp-logs
+      mountPath: /opt/render/project/src/logs
+      sizeGB: 1
