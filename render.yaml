@@ -19,7 +19,3 @@ services:
         generateValue: true
       - key: CORS_ORIGIN
         value: "*"
-    disk:
-      name: temp-logs
-      mountPath: /opt/render/project/src/logs
-      sizeGB: 1
