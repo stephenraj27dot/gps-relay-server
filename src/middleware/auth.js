@@ -16,15 +16,14 @@ const IS_DEV     = process.env.NODE_ENV !== 'production';
  */
 function tenantAuthMiddleware(socket, next) {
   try {
-    // ── Dev shortcut: plain tenant_id in query string ──────────
-    if (IS_DEV && socket.handshake.query.tenant_id) {
+    // ── Tenant ID in query string (all modes for now) ──────────
+    if (socket.handshake.query.tenant_id) {
       const tenantId = String(socket.handshake.query.tenant_id).trim();
-      if (!tenantId) {
-        return next(new Error('TENANT_REQUIRED'));
+      if (tenantId) {
+        socket.tenantId = tenantId;
+        logger.debug('[Auth] Tenant from query', { tenantId });
+        return next();
       }
-      socket.tenantId = tenantId;
-      logger.debug('[Auth] Dev mode — tenant from query', { tenantId });
-      return next();
     }
 
     // ── Production: Bearer JWT ─────────────────────────────────
